@@ -35,7 +35,7 @@
 
 /** Time (in ms) between periodic updates of the measurements. */
 #define PERIODIC_UPDATE_MS      2000
-#define IR_SENSOR_ADDRESS       0x00
+#define IR_SLAVE_ADDRESS       0x00
 #define IR_MEASURE_COMMAND      0xAF
 #define IR_READ_SENSOR_OR  0x01  // logical "or" into slave address to specify read or write
 #define IR_WRITE_SENSOR_OR 0x00
@@ -92,8 +92,64 @@ static void memLcdCallback(RTCDRV_TimerID_t id, void *user);
 //  Si7013_MeasureRHAndTemp(i2c, SI7021_ADDR, rhData, tData);
 //  return 0;
 //}
+static int32_t i2c_write_eeprom(I2C_TypeDef *i2c, uint8_t addr, int32_t *data,
+                              uint8_t command)
+{
+  I2C_TransferSeq_TypeDef    seq;
+  I2C_TransferReturn_TypeDef ret;
+  uint8_t                    i2c_read_data[2];
+  uint8_t                    i2c_write_data[1];
 
+  seq.addr  = addr;
+  seq.flags = I2C_FLAG_WRITE_READ;
+  /* Select command to issue */
+  i2c_write_data[0] = command;
+  seq.buf[0].data   = i2c_write_data;
+  seq.buf[0].len    = 1;
+  /* Select location/length of data to be read */
+  seq.buf[1].data = i2c_read_data;
+  seq.buf[1].len  = 1;
 
+  ret = I2CSPM_Transfer(i2c, &seq);
+
+  if (ret != i2cTransferDone) {
+    *data = 0;
+    return((int) ret);
+  }
+
+  // *data = ((uint32_t) i2c_read_data[0] << 8) + (i2c_read_data[1] & 0xfc);
+
+  return((int32_t) 0);
+}
+static int32_t i2c_read_eeprom(I2C_TypeDef *i2c, uint8_t addr, int32_t *data,
+                              uint8_t command)
+{
+  I2C_TransferSeq_TypeDef    seq;
+  I2C_TransferReturn_TypeDef ret;
+  uint8_t                    i2c_read_data[3];
+  uint8_t                    i2c_write_data[1];
+
+  seq.addr  = addr;
+  seq.flags = I2C_FLAG_WRITE_READ;
+  /* Select command to issue */
+  i2c_write_data[0] = command;
+  seq.buf[0].data   = i2c_write_data;
+  seq.buf[0].len    = 0;
+  /* Select location/length of data to be read */
+  seq.buf[1].data = i2c_read_data;
+  seq.buf[1].len  = 3;
+
+  ret = I2CSPM_Transfer(i2c, &seq);
+
+  if (ret != i2cTransferDone) {
+    *data = 0;
+    return((int) ret);
+  }
+
+  *data = (int32_t) (((int32_t)i2c_read_data[0] << 16) + ((int32_t)i2c_read_data[1] << 8) + ((int32_t)i2c_read_data[2]));
+
+  return((int32_t) 2);
+}
 static int32_t i2c_write_sensor(I2C_TypeDef *i2c, uint8_t addr, int64_t *data,
                               uint8_t command)
 {
@@ -119,7 +175,7 @@ static int32_t i2c_write_sensor(I2C_TypeDef *i2c, uint8_t addr, int64_t *data,
     return((int) ret);
   }
 
-  *data = ((uint32_t) i2c_read_data[0] << 8) + (i2c_read_data[1] & 0xfc);
+  // *data = ((uint32_t) i2c_read_data[0] << 8) + (i2c_read_data[1] & 0xfc);
 
   return((int32_t) 0);
 }
@@ -240,9 +296,11 @@ int main(void)
 
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_STK_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
-  bool             si7013_status;
+//  bool             si7013_status;
   int64_t          tempData = 0;
-
+  int32_t			highEepromData;
+  int32_t			lowEepromData;
+  
 // IR Temp local variables
   uint64_t      ADCsen = 0;
   uint64_t      ADCobj = 0;
@@ -294,7 +352,6 @@ int main(void)
     // if (updateMeasurement) 
     // {
     //   // performMeasurements(i2cInit.port, &rhData, &tempData);
-    //   i2c_write_sensor(i2cInit.port, IR_SENSOR_ADDRESS, &tempData, IR_READ_SENSOR_COMMAND);
     //   updateMeasurement = false;
     // }
 
@@ -304,14 +361,25 @@ int main(void)
     //   GRAPHICS_Draw(tempData, rhData);
     // }
     // EMU_EnterEM2(false);
-    i2c_write_sensor(i2cInit.port, IR_SENSOR_ADDRESS | IR_WRITE_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
+	  i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &highEepromData, 0x22);
+	  UDELAY_Delay(100000);
+	  i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &highEepromData, 0x22);
     UDELAY_Delay(100000);
-    i2c_read_sensor(i2cInit.port, IR_SENSOR_ADDRESS | IR_READ_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
+    i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &lowEepromData, 0x23);
+	  UDELAY_Delay(100000);
+	  i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &lowEepromData, 0x23);
+    UDELAY_Delay(100000);
+
+
+    i2c_write_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
+    UDELAY_Delay(100000);
+    i2c_read_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
     statusByte = (uint8_t)(tempData >> 48);
     if(statusByte != 0x60)  // check if we are busy or memory error
     {
       ADCsen = (tempData & 0xFFFFFF);
-      temp = (float)ADCsen / (2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2);
+      // temp = (float)ADCsen / (2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2);
+      temp = (float)ADCsen / (1 << 24);
       Tsen = (temp * 105) - 20;
       Fsen = (1.8 * Tsen) + 32;
 
@@ -324,7 +392,8 @@ int main(void)
       offsetTC = offset * TCF;
       ADCobj = tempData >> 24;
       ADCobj &= 0xFFFFFF;
-      ADCcomp = offsetTC - (2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2) + (float)ADCobj;
+      // ADCcomp = offsetTC - (2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2) + (float)ADCobj;
+      ADCcomp = offsetTC - (1 << 23) + (float)ADCobj;
       ADCcompTC = ADCcomp / TCF;
       Tobj = (k4obj * ADCcompTC * ADCcompTC * ADCcompTC * ADCcompTC) +
               (k3obj * ADCcompTC * ADCcompTC * ADCcompTC) + 
