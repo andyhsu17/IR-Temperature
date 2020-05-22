@@ -103,8 +103,8 @@ void GRAPHICS_Draw(int32_t tempData, uint32_t rhData)
   GLIB_clear(&glibContext);
 
   /* Draw temperature and RH */
-  GRAPHICS_DrawTemperatureC(6, 3, tempData);
-  GRAPHICS_DrawTemperatureF(64 - 17, 3, tempData);
+  GRAPHICS_DrawTemperatureC(25, 3, tempData);
+  GRAPHICS_DrawTemperatureF(75, 3, tempData);
  // GRAPHICS_DrawHumidity(127 - 40, 3, rhData);
 
   DMD_updateDisplay();
@@ -128,7 +128,7 @@ static void GRAPHICS_DrawTemperatureF(int32_t xoffset, int32_t yoffset, int32_t 
   GRAPHICS_CreateString(string, tempData);
   GLIB_drawString(&glibContext, string, strlen(string), xoffset, yoffset, 0);
 
-  GRAPHICS_DrawThermometer(xoffset + 15, yoffset + 17, 95, tempData / 1000, 'F');
+  GRAPHICS_DrawThermometer(xoffset + 15, yoffset + 17, 150, tempData / 1000, 'F');
 }
 
 /***************************************************************************//**
@@ -147,7 +147,7 @@ static void GRAPHICS_DrawTemperatureC(int32_t xoffset, int32_t yoffset, int32_t 
   GRAPHICS_CreateString(string, tempData);
   GLIB_drawString(&glibContext, string, strlen(string), xoffset, yoffset, 0);
 
-  GRAPHICS_DrawThermometer(xoffset + 15, yoffset + 17, 35, tempData / 1000, 'C');
+  GRAPHICS_DrawThermometer(xoffset + 15, yoffset + 17, 65, tempData / 1000, 'C');
 }
 
 /***************************************************************************//**
@@ -256,6 +256,10 @@ static void GRAPHICS_CreateString(char *string, int32_t value)
     string[0] = '-';
   } else {
     string[0] = ' ';
+  }
+  if(value >= 100000)
+  {
+	  string[0] = '0' + (value % 1000000) / 100000;
   }
   string[5] = 0;
   string[4] = '0' + (value % 1000) / 100;
