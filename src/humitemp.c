@@ -58,7 +58,11 @@
 /*
 Global Variables
 */
-//static GLIB_Context_t glibContext;          /* Global glib context */
+union 
+{
+  uint16_t iValue[2];
+  float fValue;
+}Myunion;
 
 /***************************************************************************//**
  * Local variables
@@ -361,15 +365,17 @@ int main(void)
     //   GRAPHICS_Draw(tempData, rhData);
     // }
     // EMU_EnterEM2(false);
-	  i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &highEepromData, 0x22);
-	  UDELAY_Delay(100000);
-	  i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &highEepromData, 0x22);
+    i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &highEepromData, 0x20);
     UDELAY_Delay(100000);
-    i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &lowEepromData, 0x23);
-	  UDELAY_Delay(100000);
-	  i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &lowEepromData, 0x23);
+    i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &highEepromData, 0x20);
     UDELAY_Delay(100000);
-
+    i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &lowEepromData, 0x21);
+    UDELAY_Delay(100000);
+    i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &lowEepromData, 0x21);
+    UDELAY_Delay(100000);
+     Myunion.iValue[0] = lowEepromData;
+     Myunion.iValue[1] = highEepromData;
+    float tempfloat = Myunion.fValue;
 
     i2c_write_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
     UDELAY_Delay(100000);
