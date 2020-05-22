@@ -42,22 +42,27 @@
 
 /*Calculation Defines*/
 #define TC 		-.0046
-#define Tref 	26.93
-#define k4comp .0005161 
-#define k3comp .5639
-#define k2comp 231.1
-#define k1comp 42070
-#define k0comp -1312000
-
-#define k4obj -1.029E-26
-#define k3obj 1.787E-19
-#define k2obj -1.631E-12
-#define k1obj 1.802E-5
-#define k0obj 26.93
 
 /*
 Global Variables
 */
+/*Calculation variables calculated in readEEPROM()*/
+float Tref;
+float k4comp;
+float k3comp;
+float k2comp;
+float k1comp;
+float k0comp;
+
+float k4obj;
+float k3obj;
+float k2obj;
+float k1obj;
+float k0obj;
+
+I2CSPM_Init_TypeDef i2cInit;
+
+
 union 
 {
   uint16_t iValue[2];
@@ -215,7 +220,70 @@ static int32_t i2c_read_sensor(I2C_TypeDef *i2c, uint8_t addr, int64_t *data,
   return((int32_t) 2);
 }
 
+float getEEPROMData(uint8_t address)
+{
+  int32_t			highEepromData;
+  int32_t			lowEepromData;
+  i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &highEepromData, address);
+  UDELAY_Delay(100000);
+  i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &highEepromData, address);
+  UDELAY_Delay(100000);
+  i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &lowEepromData, address + 1);
+  UDELAY_Delay(100000);
+  i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &lowEepromData, address + 1); 
+  Myunion.iValue[0] = lowEepromData;
+  Myunion.iValue[1] = highEepromData;
+  return Myunion.fValue; 
+}
 
+void readEEPROM(void)
+{
+  for(int i = 0x20; i <= 0x36; i += 2)
+  {
+    float readVal = getEEPROMData(i);
+    switch(i)
+    {
+      case 0x20:
+        Tref = readVal;
+        break;
+      case 0x22:
+        k4comp = readVal;
+        break;
+      case 0x24:
+        k3comp = readVal;
+        break;
+      case 0x26:
+        k2comp = readVal;
+        break;
+      case 0x28:
+        k1comp = readVal;
+        break;
+      case 0x2A:
+        k0comp = readVal;
+        break;
+      case 0x2C:
+        break;
+      case 0x2E:
+        k4obj = readVal;
+        break;
+      case 0x30:
+        k3obj = readVal;
+        break;
+      case 0x32:
+        k2obj = readVal;
+        break;
+      case 0x34:
+        k1obj = readVal;
+        break;
+      case 0x36:
+        k0obj = readVal;
+        break;
+    }
+  }
+   
+  
+  
+}
 
 /***************************************************************************//**
  * @brief Setup GPIO, enable sensor isolation switch
@@ -286,7 +354,6 @@ static void periodicUpdateCallback(RTCDRV_TimerID_t id, void *user)
 int main(void)
 {
   // I2CSPM_Init_TypeDef i2cInit = I2CSPM_INIT_DEFAULT;
-  I2CSPM_Init_TypeDef i2cInit;
   i2cInit.port = I2C0;
   i2cInit.sclPort = gpioPortC;
   i2cInit.sclPin = 11;
@@ -302,8 +369,7 @@ int main(void)
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_DEFAULT;
 //  bool             si7013_status;
   int64_t          tempData = 0;
-  int32_t			highEepromData;
-  int32_t			lowEepromData;
+
   
 // IR Temp local variables
   uint64_t      ADCsen = 0;
@@ -340,7 +406,7 @@ int main(void)
 
   /* Get initial sensor status */
   // si7013_status = Si7013_Detect(i2cInit.port, SI7021_ADDR, 0);
-
+  readEEPROM();
   /* Set up periodic update of the display. */
   RTCDRV_AllocateTimer(&periodicUpdateTimerId);
   RTCDRV_StartTimer(periodicUpdateTimerId, rtcdrvTimerTypePeriodic,
@@ -365,17 +431,7 @@ int main(void)
     //   GRAPHICS_Draw(tempData, rhData);
     // }
     // EMU_EnterEM2(false);
-    i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &highEepromData, 0x20);
-    UDELAY_Delay(100000);
-    i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &highEepromData, 0x20);
-    UDELAY_Delay(100000);
-    i2c_write_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &lowEepromData, 0x21);
-    UDELAY_Delay(100000);
-    i2c_read_eeprom(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &lowEepromData, 0x21);
-    UDELAY_Delay(100000);
-     Myunion.iValue[0] = lowEepromData;
-     Myunion.iValue[1] = highEepromData;
-    float tempfloat = Myunion.fValue;
+
 
     i2c_write_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
     UDELAY_Delay(100000);

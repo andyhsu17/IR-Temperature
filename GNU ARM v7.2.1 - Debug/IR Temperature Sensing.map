@@ -1,7 +1,7 @@
 Archive member included to satisfy reference by file (symbol)
 
 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubdf3.o)
-                              ./src/humitemp.o (__aeabi_dsub)
+                              ./src/humitemp.o (__aeabi_dadd)
 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_muldivdf3.o)
                               ./src/humitemp.o (__aeabi_dmul)
 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_truncdfsf2.o)
@@ -58,11 +58,23 @@ Archive member included to satisfy reference by file (symbol)
 Allocating common symbols
 Common symbol       size              file
 
+i2cInit             0x18              ./src/humitemp.o
+Tref                0x4               ./src/humitemp.o
 Myunion             0x4               ./src/humitemp.o
 errno               0x4               /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-reent.o)
+k1obj               0x4               ./src/humitemp.o
 dirtyRows           0x10              ./Graphics/dmd_display.o
+k4comp              0x4               ./src/humitemp.o
+k0comp              0x4               ./src/humitemp.o
+k3obj               0x4               ./src/humitemp.o
+k2obj               0x4               ./src/humitemp.o
+k3comp              0x4               ./src/humitemp.o
 periodicUpdateTimerId
                     0x4               ./src/humitemp.o
+k0obj               0x4               ./src/humitemp.o
+k4obj               0x4               ./src/humitemp.o
+k2comp              0x4               ./src/humitemp.o
+k1comp              0x4               ./src/humitemp.o
 
 Discarded input sections
 
@@ -4171,7 +4183,7 @@ END GROUP
 LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtend.o
 LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtn.o
 
-.text           0x0000000000000000     0x7440
+.text           0x0000000000000000     0x7450
  *(.vectors)
  .vectors       0x0000000000000000      0x10c ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
                 0x0000000000000000                __Vectors
@@ -4679,82 +4691,88 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
  .text.i2c_read_sensor
                 0x0000000000005770      0x12a ./src/humitemp.o
  *fill*         0x000000000000589a        0x2 
+ .text.getEEPROMData
+                0x000000000000589c       0x8c ./src/humitemp.o
+                0x000000000000589c                getEEPROMData
+ .text.readEEPROM
+                0x0000000000005928      0x11c ./src/humitemp.o
+                0x0000000000005928                readEEPROM
  .text.gpioSetup
-                0x000000000000589c       0x20 ./src/humitemp.o
+                0x0000000000005a44       0x20 ./src/humitemp.o
  .text.memLcdCallback
-                0x00000000000058bc       0x28 ./src/humitemp.o
+                0x0000000000005a64       0x28 ./src/humitemp.o
  .text.rtccIntCallbackRegister
-                0x00000000000058e4       0x50 ./src/humitemp.o
-                0x00000000000058e4                rtccIntCallbackRegister
+                0x0000000000005a8c       0x50 ./src/humitemp.o
+                0x0000000000005a8c                rtccIntCallbackRegister
  .text.periodicUpdateCallback
-                0x0000000000005934       0x2c ./src/humitemp.o
- .text.main     0x0000000000005960      0x5e0 ./src/humitemp.o
-                0x0000000000005960                main
- .text          0x0000000000005f40      0x378 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubdf3.o)
-                0x0000000000005f40                __aeabi_drsub
-                0x0000000000005f48                __subdf3
-                0x0000000000005f48                __aeabi_dsub
-                0x0000000000005f4c                __aeabi_dadd
-                0x0000000000005f4c                __adddf3
-                0x00000000000061c4                __aeabi_ui2d
-                0x00000000000061c4                __floatunsidf
-                0x00000000000061e4                __floatsidf
-                0x00000000000061e4                __aeabi_i2d
-                0x0000000000006208                __extendsfdf2
-                0x0000000000006208                __aeabi_f2d
-                0x000000000000624c                __aeabi_ul2d
-                0x000000000000624c                __floatundidf
-                0x000000000000625c                __aeabi_l2d
-                0x000000000000625c                __floatdidf
- .text          0x00000000000062b8      0x424 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_muldivdf3.o)
-                0x00000000000062b8                __aeabi_dmul
-                0x00000000000062b8                __muldf3
-                0x000000000000650c                __aeabi_ddiv
-                0x000000000000650c                __divdf3
- .text          0x00000000000066dc       0xa0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_truncdfsf2.o)
-                0x00000000000066dc                __aeabi_d2f
-                0x00000000000066dc                __truncdfsf2
- .text          0x000000000000677c      0x21c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubsf3.o)
-                0x000000000000677c                __aeabi_frsub
-                0x0000000000006784                __aeabi_fsub
-                0x0000000000006784                __subsf3
-                0x0000000000006788                __aeabi_fadd
-                0x0000000000006788                __addsf3
-                0x00000000000068e8                __aeabi_ui2f
-                0x00000000000068e8                __floatunsisf
-                0x00000000000068f0                __floatsisf
-                0x00000000000068f0                __aeabi_i2f
-                0x000000000000690c                __aeabi_ul2f
-                0x000000000000690c                __floatundisf
-                0x000000000000691c                __aeabi_l2f
-                0x000000000000691c                __floatdisf
- .text          0x0000000000006998       0x30 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_aeabi_uldivmod.o)
-                0x0000000000006998                __aeabi_uldivmod
- .text          0x00000000000069c8      0x2cc /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_udivmoddi4.o)
-                0x00000000000069c8                __udivmoddi4
- .text          0x0000000000006c94        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_dvmd_tls.o)
-                0x0000000000006c94                __aeabi_ldiv0
-                0x0000000000006c94                __aeabi_idiv0
- .text.exit     0x0000000000006c98       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-exit.o)
-                0x0000000000006c98                exit
+                0x0000000000005adc       0x2c ./src/humitemp.o
+ .text.main     0x0000000000005b08      0x448 ./src/humitemp.o
+                0x0000000000005b08                main
+ .text          0x0000000000005f50      0x378 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubdf3.o)
+                0x0000000000005f50                __aeabi_drsub
+                0x0000000000005f58                __subdf3
+                0x0000000000005f58                __aeabi_dsub
+                0x0000000000005f5c                __aeabi_dadd
+                0x0000000000005f5c                __adddf3
+                0x00000000000061d4                __aeabi_ui2d
+                0x00000000000061d4                __floatunsidf
+                0x00000000000061f4                __floatsidf
+                0x00000000000061f4                __aeabi_i2d
+                0x0000000000006218                __extendsfdf2
+                0x0000000000006218                __aeabi_f2d
+                0x000000000000625c                __aeabi_ul2d
+                0x000000000000625c                __floatundidf
+                0x000000000000626c                __aeabi_l2d
+                0x000000000000626c                __floatdidf
+ .text          0x00000000000062c8      0x424 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_muldivdf3.o)
+                0x00000000000062c8                __aeabi_dmul
+                0x00000000000062c8                __muldf3
+                0x000000000000651c                __aeabi_ddiv
+                0x000000000000651c                __divdf3
+ .text          0x00000000000066ec       0xa0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_truncdfsf2.o)
+                0x00000000000066ec                __aeabi_d2f
+                0x00000000000066ec                __truncdfsf2
+ .text          0x000000000000678c      0x21c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubsf3.o)
+                0x000000000000678c                __aeabi_frsub
+                0x0000000000006794                __aeabi_fsub
+                0x0000000000006794                __subsf3
+                0x0000000000006798                __aeabi_fadd
+                0x0000000000006798                __addsf3
+                0x00000000000068f8                __aeabi_ui2f
+                0x00000000000068f8                __floatunsisf
+                0x0000000000006900                __floatsisf
+                0x0000000000006900                __aeabi_i2f
+                0x000000000000691c                __aeabi_ul2f
+                0x000000000000691c                __floatundisf
+                0x000000000000692c                __aeabi_l2f
+                0x000000000000692c                __floatdisf
+ .text          0x00000000000069a8       0x30 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_aeabi_uldivmod.o)
+                0x00000000000069a8                __aeabi_uldivmod
+ .text          0x00000000000069d8      0x2cc /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_udivmoddi4.o)
+                0x00000000000069d8                __udivmoddi4
+ .text          0x0000000000006ca4        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_dvmd_tls.o)
+                0x0000000000006ca4                __aeabi_ldiv0
+                0x0000000000006ca4                __aeabi_idiv0
+ .text.exit     0x0000000000006ca8       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-exit.o)
+                0x0000000000006ca8                exit
  .text.__libc_init_array
-                0x0000000000006cc0       0x48 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-init.o)
-                0x0000000000006cc0                __libc_init_array
- .text.memcpy   0x0000000000006d08       0x16 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memcpy-stub.o)
-                0x0000000000006d08                memcpy
- .text.memset   0x0000000000006d1e       0x10 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memset.o)
-                0x0000000000006d1e                memset
- *fill*         0x0000000000006d2e        0x2 
- .text._exit    0x0000000000006d30        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libnosys.a(_exit.o)
-                0x0000000000006d30                _exit
+                0x0000000000006cd0       0x48 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-init.o)
+                0x0000000000006cd0                __libc_init_array
+ .text.memcpy   0x0000000000006d18       0x16 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memcpy-stub.o)
+                0x0000000000006d18                memcpy
+ .text.memset   0x0000000000006d2e       0x10 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memset.o)
+                0x0000000000006d2e                memset
+ *fill*         0x0000000000006d3e        0x2 
+ .text._exit    0x0000000000006d40        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libnosys.a(_exit.o)
+                0x0000000000006d40                _exit
  *(.init)
- .init          0x0000000000006d34        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crti.o
-                0x0000000000006d34                _init
- .init          0x0000000000006d38        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtn.o
+ .init          0x0000000000006d44        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crti.o
+                0x0000000000006d44                _init
+ .init          0x0000000000006d48        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtn.o
  *(.fini)
- .fini          0x0000000000006d40        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crti.o
-                0x0000000000006d40                _fini
- .fini          0x0000000000006d44        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtn.o
+ .fini          0x0000000000006d50        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crti.o
+                0x0000000000006d50                _fini
+ .fini          0x0000000000006d54        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -4766,65 +4784,65 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
  *(.rodata*)
- .rodata        0x0000000000006d4c       0x15 ./Drivers/displayls013b7dh03.o
- *fill*         0x0000000000006d61        0x3 
- .rodata        0x0000000000006d64       0x18 ./Drivers/displaypalemlib.o
- .rodata        0x0000000000006d7c        0x9 ./Drivers/udelay.o
- *fill*         0x0000000000006d85        0x3 
+ .rodata        0x0000000000006d5c       0x15 ./Drivers/displayls013b7dh03.o
+ *fill*         0x0000000000006d71        0x3 
+ .rodata        0x0000000000006d74       0x18 ./Drivers/displaypalemlib.o
+ .rodata        0x0000000000006d8c        0x9 ./Drivers/udelay.o
+ *fill*         0x0000000000006d95        0x3 
  .rodata.GLIB_FontNarrow6x8PixMap
-                0x0000000000006d88      0x320 ./Graphics/glib_font_narrow_6x8.o
+                0x0000000000006d98      0x320 ./Graphics/glib_font_narrow_6x8.o
  .rodata.GLIB_FontNarrow6x8
-                0x00000000000070a8       0x10 ./Graphics/glib_font_narrow_6x8.o
-                0x00000000000070a8                GLIB_FontNarrow6x8
+                0x00000000000070b8       0x10 ./Graphics/glib_font_narrow_6x8.o
+                0x00000000000070b8                GLIB_FontNarrow6x8
  .rodata.GLIB_FontNormal8x8PixMap
-                0x00000000000070b8      0x320 ./Graphics/glib_font_normal_8x8.o
+                0x00000000000070c8      0x320 ./Graphics/glib_font_normal_8x8.o
  .rodata.GLIB_FontNormal8x8
-                0x00000000000073d8       0x10 ./Graphics/glib_font_normal_8x8.o
-                0x00000000000073d8                GLIB_FontNormal8x8
+                0x00000000000073e8       0x10 ./Graphics/glib_font_normal_8x8.o
+                0x00000000000073e8                GLIB_FontNormal8x8
  .rodata.flashWsTable
-                0x00000000000073e8       0x28 ./emlib/em_cmu.o
+                0x00000000000073f8       0x28 ./emlib/em_cmu.o
  .rodata.i2cNSum
-                0x0000000000007410        0x4 ./emlib/em_i2c.o
- .rodata        0x0000000000007414       0x22 ./src/humitemp.o
- *fill*         0x0000000000007436        0x2 
+                0x0000000000007420        0x4 ./emlib/em_i2c.o
+ .rodata        0x0000000000007424       0x22 ./src/humitemp.o
+ *fill*         0x0000000000007446        0x2 
  .rodata._global_impure_ptr
-                0x0000000000007438        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-impure.o)
-                0x0000000000007438                _global_impure_ptr
+                0x0000000000007448        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-impure.o)
+                0x0000000000007448                _global_impure_ptr
  *(.eh_frame*)
- .eh_frame      0x000000000000743c        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtbegin.o
- .eh_frame      0x000000000000743c        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtend.o
+ .eh_frame      0x000000000000744c        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtbegin.o
+ .eh_frame      0x000000000000744c        0x4 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtend.o
 
-.glue_7         0x0000000000007440        0x0
- .glue_7        0x0000000000007440        0x0 linker stubs
+.glue_7         0x0000000000007450        0x0
+ .glue_7        0x0000000000007450        0x0 linker stubs
 
-.glue_7t        0x0000000000007440        0x0
- .glue_7t       0x0000000000007440        0x0 linker stubs
+.glue_7t        0x0000000000007450        0x0
+ .glue_7t       0x0000000000007450        0x0 linker stubs
 
-.vfp11_veneer   0x0000000000007440        0x0
- .vfp11_veneer  0x0000000000007440        0x0 linker stubs
+.vfp11_veneer   0x0000000000007450        0x0
+ .vfp11_veneer  0x0000000000007450        0x0 linker stubs
 
-.v4_bx          0x0000000000007440        0x0
- .v4_bx         0x0000000000007440        0x0 linker stubs
+.v4_bx          0x0000000000007450        0x0
+ .v4_bx         0x0000000000007450        0x0 linker stubs
 
-.iplt           0x0000000000007440        0x0
- .iplt          0x0000000000007440        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtbegin.o
+.iplt           0x0000000000007450        0x0
+ .iplt          0x0000000000007450        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000000007440                __exidx_start = .
+                0x0000000000007450                __exidx_start = .
 
-.ARM.exidx      0x0000000000007440        0x8
+.ARM.exidx      0x0000000000007450        0x8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
- .ARM.exidx     0x0000000000007440        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/crt0.o
- .ARM.exidx     0x0000000000007448        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_udivmoddi4.o)
+ .ARM.exidx     0x0000000000007450        0x8 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/crt0.o
+ .ARM.exidx     0x0000000000007458        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_udivmoddi4.o)
                                           0x8 (size before relaxing)
-                0x0000000000007448                __exidx_end = .
-                0x0000000000007448                __etext = .
+                0x0000000000007458                __exidx_end = .
+                0x0000000000007458                __etext = .
 
-.rel.dyn        0x0000000000007448        0x0
- .rel.iplt      0x0000000000007448        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtbegin.o
+.rel.dyn        0x0000000000007458        0x0
+ .rel.iplt      0x0000000000007458        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtbegin.o
 
-.data           0x0000000020000000       0xa4 load address 0x0000000000007448
+.data           0x0000000020000000       0xa4 load address 0x0000000000007458
                 0x0000000020000000                __data_start__ = .
  *(vtable)
  *(.data*)
@@ -4884,10 +4902,10 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
                 0x00000000200000a4                . = ALIGN (0x4)
                 0x00000000200000a4                __data_end__ = .
 
-.igot.plt       0x00000000200000a4        0x0 load address 0x00000000000074ec
+.igot.plt       0x00000000200000a4        0x0 load address 0x00000000000074fc
  .igot.plt      0x00000000200000a4        0x0 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/crtbegin.o
 
-.bss            0x00000000200000a8      0x9bc load address 0x00000000000074f0
+.bss            0x00000000200000a8      0xa00 load address 0x0000000000007500
                 0x00000000200000a8                . = ALIGN (0x4)
                 0x00000000200000a8                __bss_start__ = .
  *(.bss*)
@@ -4954,24 +4972,36 @@ LOAD /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/g
  *(COMMON)
  COMMON         0x0000000020000a4c       0x10 ./Graphics/dmd_display.o
                 0x0000000020000a4c                dirtyRows
- COMMON         0x0000000020000a5c        0x8 ./src/humitemp.o
-                0x0000000020000a5c                Myunion
-                0x0000000020000a60                periodicUpdateTimerId
-                0x0000000020000a64                . = ALIGN (0x4)
-                0x0000000020000a64                __bss_end__ = .
+ COMMON         0x0000000020000a5c       0x4c ./src/humitemp.o
+                0x0000000020000a5c                i2cInit
+                0x0000000020000a74                Tref
+                0x0000000020000a78                Myunion
+                0x0000000020000a7c                k1obj
+                0x0000000020000a80                k4comp
+                0x0000000020000a84                k0comp
+                0x0000000020000a88                k3obj
+                0x0000000020000a8c                k2obj
+                0x0000000020000a90                k3comp
+                0x0000000020000a94                periodicUpdateTimerId
+                0x0000000020000a98                k0obj
+                0x0000000020000a9c                k4obj
+                0x0000000020000aa0                k2comp
+                0x0000000020000aa4                k1comp
+                0x0000000020000aa8                . = ALIGN (0x4)
+                0x0000000020000aa8                __bss_end__ = .
 
-.heap           0x0000000020000a68      0xc00
-                0x0000000020000a68                __HeapBase = .
-                0x0000000020000a68                __end__ = .
-                0x0000000020000a68                end = __end__
-                0x0000000020000a68                _end = __end__
+.heap           0x0000000020000aa8      0xc00
+                0x0000000020000aa8                __HeapBase = .
+                0x0000000020000aa8                __end__ = .
+                0x0000000020000aa8                end = __end__
+                0x0000000020000aa8                _end = __end__
  *(.heap*)
- .heap          0x0000000020000a68      0xc00 ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
-                0x0000000020001668                __HeapLimit = .
+ .heap          0x0000000020000aa8      0xc00 ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
+                0x00000000200016a8                __HeapLimit = .
 
-.stack_dummy    0x0000000020000a68      0x400
+.stack_dummy    0x0000000020000aa8      0x400
  *(.stack*)
- .stack         0x0000000020000a68      0x400 ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
+ .stack         0x0000000020000aa8      0x400 ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
                 0x0000000020040000                __StackTop = (ORIGIN (RAM) + LENGTH (RAM))
                 0x000000002003fc00                __StackLimit = (__StackTop - SIZEOF (.stack_dummy))
                 0x0000000020040000                PROVIDE (__stack, __StackTop)
@@ -5086,7 +5116,7 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .comment       0x000000000000007e       0x7f ./src/graphics.o
  .comment       0x000000000000007e       0x7f ./src/humitemp.o
 
-.debug_line     0x0000000000000000     0xfcff
+.debug_line     0x0000000000000000     0xfd4a
  .debug_line    0x0000000000000000       0xeb ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
  .debug_line    0x00000000000000eb      0x982 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_line    0x0000000000000a6d      0x6c9 ./Drivers/display.o
@@ -5108,9 +5138,9 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_line    0x000000000000c595      0xa9d ./emlib/em_rtcc.o
  .debug_line    0x000000000000d032      0xd14 ./emlib/em_usart.o
  .debug_line    0x000000000000dd46      0xee2 ./src/graphics.o
- .debug_line    0x000000000000ec28     0x10d7 ./src/humitemp.o
+ .debug_line    0x000000000000ec28     0x1122 ./src/humitemp.o
 
-.debug_info     0x0000000000000000    0x17318
+.debug_info     0x0000000000000000    0x1743e
  .debug_info    0x0000000000000000       0x26 ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
  .debug_info    0x0000000000000026      0x8f6 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_info    0x000000000000091c      0xd37 ./Drivers/display.o
@@ -5132,9 +5162,9 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_info    0x00000000000123cc      0xb6f ./emlib/em_rtcc.o
  .debug_info    0x0000000000012f3b     0x1030 ./emlib/em_usart.o
  .debug_info    0x0000000000013f6b      0xed0 ./src/graphics.o
- .debug_info    0x0000000000014e3b     0x24dd ./src/humitemp.o
+ .debug_info    0x0000000000014e3b     0x2603 ./src/humitemp.o
 
-.debug_abbrev   0x0000000000000000     0x3157
+.debug_abbrev   0x0000000000000000     0x3189
  .debug_abbrev  0x0000000000000000       0x14 ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
  .debug_abbrev  0x0000000000000014      0x1b7 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_abbrev  0x00000000000001cb      0x1d3 ./Drivers/display.o
@@ -5156,9 +5186,9 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_abbrev  0x0000000000002831      0x1c7 ./emlib/em_rtcc.o
  .debug_abbrev  0x00000000000029f8      0x20c ./emlib/em_usart.o
  .debug_abbrev  0x0000000000002c04      0x228 ./src/graphics.o
- .debug_abbrev  0x0000000000002e2c      0x32b ./src/humitemp.o
+ .debug_abbrev  0x0000000000002e2c      0x35d ./src/humitemp.o
 
-.debug_aranges  0x0000000000000000      0xc28
+.debug_aranges  0x0000000000000000      0xc38
  .debug_aranges
                 0x0000000000000000       0x20 ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
  .debug_aranges
@@ -5202,9 +5232,9 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_aranges
                 0x0000000000000b60       0x58 ./src/graphics.o
  .debug_aranges
-                0x0000000000000bb8       0x70 ./src/humitemp.o
+                0x0000000000000bb8       0x80 ./src/humitemp.o
 
-.debug_str      0x0000000000000000   0x15e0c8
+.debug_str      0x0000000000000000   0x15e094
  .debug_str     0x0000000000000000      0x10a ./CMSIS/EFM32PG12B/startup_efm32pg12b.o
  .debug_str     0x000000000000010a   0x14e18f ./CMSIS/EFM32PG12B/system_efm32pg12b.o
                                      0x14f0c1 (size before relaxing)
@@ -5246,10 +5276,10 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
                                      0x15155a (size before relaxing)
  .debug_str     0x000000000015d4d8      0x346 ./src/graphics.o
                                      0x154439 (size before relaxing)
- .debug_str     0x000000000015d81e      0x8aa ./src/humitemp.o
-                                     0x157340 (size before relaxing)
+ .debug_str     0x000000000015d81e      0x876 ./src/humitemp.o
+                                     0x157306 (size before relaxing)
 
-.debug_loc      0x0000000000000000     0x657e
+.debug_loc      0x0000000000000000     0x661e
  .debug_loc     0x0000000000000000      0x2e4 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_loc     0x00000000000002e4      0x140 ./Drivers/display.o
  .debug_loc     0x0000000000000424      0x2c4 ./Drivers/displayls013b7dh03.o
@@ -5268,9 +5298,9 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_loc     0x000000000000557c      0x254 ./emlib/em_rtcc.o
  .debug_loc     0x00000000000057d0      0x7da ./emlib/em_usart.o
  .debug_loc     0x0000000000005faa      0x28e ./src/graphics.o
- .debug_loc     0x0000000000006238      0x346 ./src/humitemp.o
+ .debug_loc     0x0000000000006238      0x3e6 ./src/humitemp.o
 
-.debug_ranges   0x0000000000000000      0xac0
+.debug_ranges   0x0000000000000000      0xad0
  .debug_ranges  0x0000000000000000       0x58 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_ranges  0x0000000000000058       0x28 ./Drivers/display.o
  .debug_ranges  0x0000000000000080       0x50 ./Drivers/displayls013b7dh03.o
@@ -5289,9 +5319,9 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_ranges  0x0000000000000918       0x40 ./emlib/em_rtcc.o
  .debug_ranges  0x0000000000000958       0xc0 ./emlib/em_usart.o
  .debug_ranges  0x0000000000000a18       0x48 ./src/graphics.o
- .debug_ranges  0x0000000000000a60       0x60 ./src/humitemp.o
+ .debug_ranges  0x0000000000000a60       0x70 ./src/humitemp.o
 
-.debug_macro    0x0000000000000000     0x58d4
+.debug_macro    0x0000000000000000     0x5892
  .debug_macro   0x0000000000000000      0x282 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_macro   0x0000000000000282       0x4f ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_macro   0x00000000000002d1       0x51 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
@@ -5365,13 +5395,13 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_macro   0x00000000000052dd       0x22 ./src/graphics.o
  .debug_macro   0x00000000000052ff       0x34 ./src/graphics.o
  .debug_macro   0x0000000000005333       0x1c ./src/graphics.o
- .debug_macro   0x000000000000534f      0x49e ./src/humitemp.o
- .debug_macro   0x00000000000057ed       0x58 ./src/humitemp.o
- .debug_macro   0x0000000000005845       0x28 ./src/humitemp.o
- .debug_macro   0x000000000000586d       0x10 ./src/humitemp.o
- .debug_macro   0x000000000000587d       0x57 ./src/humitemp.o
+ .debug_macro   0x000000000000534f      0x45c ./src/humitemp.o
+ .debug_macro   0x00000000000057ab       0x58 ./src/humitemp.o
+ .debug_macro   0x0000000000005803       0x28 ./src/humitemp.o
+ .debug_macro   0x000000000000582b       0x10 ./src/humitemp.o
+ .debug_macro   0x000000000000583b       0x57 ./src/humitemp.o
 
-.debug_frame    0x0000000000000000     0x3238
+.debug_frame    0x0000000000000000     0x327c
  .debug_frame   0x0000000000000000      0x164 ./CMSIS/EFM32PG12B/system_efm32pg12b.o
  .debug_frame   0x0000000000000164       0xa0 ./Drivers/display.o
  .debug_frame   0x0000000000000204      0x154 ./Drivers/displayls013b7dh03.o
@@ -5390,15 +5420,15 @@ OUTPUT(IR Temperature Sensing.axf elf32-littlearm)
  .debug_frame   0x0000000000002824      0x118 ./emlib/em_rtcc.o
  .debug_frame   0x000000000000293c      0x388 ./emlib/em_usart.o
  .debug_frame   0x0000000000002cc4      0x138 ./src/graphics.o
- .debug_frame   0x0000000000002dfc      0x1b4 ./src/humitemp.o
- .debug_frame   0x0000000000002fb0       0xac /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubdf3.o)
- .debug_frame   0x000000000000305c       0x50 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_muldivdf3.o)
- .debug_frame   0x00000000000030ac       0x24 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_truncdfsf2.o)
- .debug_frame   0x00000000000030d0       0x4c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubsf3.o)
- .debug_frame   0x000000000000311c       0x2c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x0000000000003148       0x34 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_udivmoddi4.o)
- .debug_frame   0x000000000000317c       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-exit.o)
- .debug_frame   0x00000000000031a4       0x2c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-init.o)
- .debug_frame   0x00000000000031d0       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memcpy-stub.o)
- .debug_frame   0x00000000000031f8       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memset.o)
- .debug_frame   0x0000000000003218       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libnosys.a(_exit.o)
+ .debug_frame   0x0000000000002dfc      0x1f8 ./src/humitemp.o
+ .debug_frame   0x0000000000002ff4       0xac /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubdf3.o)
+ .debug_frame   0x00000000000030a0       0x50 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_muldivdf3.o)
+ .debug_frame   0x00000000000030f0       0x24 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_truncdfsf2.o)
+ .debug_frame   0x0000000000003114       0x4c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_arm_addsubsf3.o)
+ .debug_frame   0x0000000000003160       0x2c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x000000000000318c       0x34 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v7e-m/fpv4-sp/softfp/libgcc.a(_udivmoddi4.o)
+ .debug_frame   0x00000000000031c0       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-exit.o)
+ .debug_frame   0x00000000000031e8       0x2c /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-init.o)
+ .debug_frame   0x0000000000003214       0x28 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x000000000000323c       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x000000000000325c       0x20 /Applications/Simplicity Studio.app/Contents/Eclipse/developer/toolchains/gnu_arm/7.2_2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/softfp/libnosys.a(_exit.o)
