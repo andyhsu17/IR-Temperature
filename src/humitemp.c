@@ -386,6 +386,8 @@ int main(void)
   float Tobj;
   float Fobj;
 
+// prevent error
+  uint32_t rhData = 0;
 
   /* Chip errata */
   CHIP_Init();
@@ -419,52 +421,50 @@ int main(void)
 
   while (true)
   {
-    // if (updateMeasurement) 
-    // {
-    //   // performMeasurements(i2cInit.port, &rhData, &tempData);
-    //   updateMeasurement = false;
-    // }
-
-    // if (updateDisplay) 
-    // {
-    //   updateDisplay = false;
-    //   GRAPHICS_Draw(tempData, rhData);
-    // }
-    // EMU_EnterEM2(false);
-
-
-    i2c_write_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
-    UDELAY_Delay(100000);
-    i2c_read_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
-    statusByte = (uint8_t)(tempData >> 48);
-    if(statusByte != 0x60)  // check if we are busy or memory error
+    if (updateMeasurement) 
     {
-      ADCsen = (tempData & 0xFFFFFF);
-      // temp = (float)ADCsen / (2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2);
-      temp = (float)ADCsen / (1 << 24);
-      Tsen = (temp * 105) - 20;
-      Fsen = (1.8 * Tsen) + 32;
+      // performMeasurements(i2cInit.port, &rhData, &tempData);
+      i2c_write_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_WRITE_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
+      UDELAY_Delay(100000);
+      i2c_read_sensor(i2cInit.port, IR_SLAVE_ADDRESS | IR_READ_SENSOR_OR, &tempData, IR_MEASURE_COMMAND);
+      statusByte = (uint8_t)(tempData >> 48);
+      if(statusByte != 0x60)  // check if we are busy or memory error
+      {
+        ADCsen = (tempData & 0xFFFFFF);
+        temp = (float)ADCsen / (1 << 24);
+        Tsen = (temp * 105) - 20;
+        Fsen = (1.8 * Tsen) + 32;
 
-      TCF = 1 + ((Tsen - Tref) * TC);
-      offset = (k4comp * (Tsen * Tsen * Tsen * Tsen)) +
-                (k3comp * (Tsen * Tsen * Tsen)) + 
-                (k2comp * (Tsen * Tsen)) + 
-                (k1comp * Tsen) + 
-                (k0comp); 
-      offsetTC = offset * TCF;
-      ADCobj = tempData >> 24;
-      ADCobj &= 0xFFFFFF;
-      // ADCcomp = offsetTC - (2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2*2) + (float)ADCobj;
-      ADCcomp = offsetTC - (1 << 23) + (float)ADCobj;
-      ADCcompTC = ADCcomp / TCF;
-      Tobj = (k4obj * ADCcompTC * ADCcompTC * ADCcompTC * ADCcompTC) +
-              (k3obj * ADCcompTC * ADCcompTC * ADCcompTC) + 
-              (k2obj * ADCcompTC * ADCcompTC) + 
-              (k1obj * ADCcompTC) + 
-              (k0obj);
-      Fobj = 1.8 * Tobj + 32;
+        TCF = 1 + ((Tsen - Tref) * TC);
+        offset = (k4comp * (Tsen * Tsen * Tsen * Tsen)) +
+                  (k3comp * (Tsen * Tsen * Tsen)) + 
+                  (k2comp * (Tsen * Tsen)) + 
+                  (k1comp * Tsen) + 
+                  (k0comp); 
+        offsetTC = offset * TCF;
+        ADCobj = tempData >> 24;
+        ADCobj &= 0xFFFFFF;
+        ADCcomp = offsetTC - (1 << 23) + (float)ADCobj;
+        ADCcompTC = ADCcomp / TCF;
+        Tobj = (k4obj * ADCcompTC * ADCcompTC * ADCcompTC * ADCcompTC) +
+                (k3obj * ADCcompTC * ADCcompTC * ADCcompTC) + 
+                (k2obj * ADCcompTC * ADCcompTC) + 
+                (k1obj * ADCcompTC) + 
+                (k0obj);
+        Fobj = 1.8 * Tobj + 32;
+      }
+      updateMeasurement = false;
+    }
+
+    if (updateDisplay) 
+    {
+      updateDisplay = false;
+      GRAPHICS_Draw((int32_t)Tobj * 1000, rhData);
     }
     EMU_EnterEM2(false);
+
+
+
 
   }
 }

@@ -105,7 +105,7 @@ void GRAPHICS_Draw(int32_t tempData, uint32_t rhData)
   /* Draw temperature and RH */
   GRAPHICS_DrawTemperatureC(6, 3, tempData);
   GRAPHICS_DrawTemperatureF(64 - 17, 3, tempData);
-  GRAPHICS_DrawHumidity(127 - 40, 3, rhData);
+ // GRAPHICS_DrawHumidity(127 - 40, 3, rhData);
 
   DMD_updateDisplay();
 }
