@@ -30,7 +30,7 @@ static GLIB_Context_t glibContext;          /* Global glib context */
 static void GRAPHICS_DrawThermometer(int32_t xoffset, int32_t yoffset, uint32_t max, int32_t level, char scale);
 static void GRAPHICS_DrawTemperatureC(int32_t xoffset, int32_t yoffset, int32_t tempData);
 static void GRAPHICS_DrawTemperatureF(int32_t xoffset, int32_t yoffset, int32_t tempData);
-static void GRAPHICS_DrawHumidity(int32_t xoffset, int32_t yoffset, uint32_t rhData);
+//static void GRAPHICS_DrawHumidity(int32_t xoffset, int32_t yoffset, uint32_t rhData);
 static void GRAPHICS_CreateString(char *string, int32_t value);
 
 /***************************************************************************//**
@@ -231,15 +231,15 @@ static void GRAPHICS_DrawThermometer(int32_t xoffset,
  * @param rhData
  *        Relative humidity (in percent), multiplied by 1000.
  ******************************************************************************/
-static void GRAPHICS_DrawHumidity(int32_t xoffset, int32_t yoffset, uint32_t rhData)
-{
-  char string[10];
-
-  GRAPHICS_CreateString(string, rhData);
-  GLIB_drawString(&glibContext, string, strlen(string), xoffset, yoffset, 0);
-
-  GRAPHICS_DrawThermometer(xoffset + 15, yoffset + 17, 100, rhData / 1000, '%');
-}
+//static void GRAPHICS_DrawHumidity(int32_t xoffset, int32_t yoffset, uint32_t rhData)
+//{
+//  char string[10];
+//
+//  GRAPHICS_CreateString(string, rhData);
+//  GLIB_drawString(&glibContext, string, strlen(string), xoffset, yoffset, 0);
+//
+//  GRAPHICS_DrawThermometer(xoffset + 15, yoffset + 17, 100, rhData / 1000, '%');
+//}
 
 /***************************************************************************//**
  * @brief Helper function for printing numbers. Consumes less space than

@@ -14,12 +14,14 @@
  * sections of the MSLA applicable to Source Code.
  *
  ******************************************************************************/
-
+#include "string.h"
 #include "em_device.h"
 #include "em_chip.h"
 #include "em_cmu.h"
 #include "em_emu.h"
 #include "em_gpio.h"
+#include "em_leuart.h"
+#include "em_core.h"
 #include "cpt112s_config.h"
 #include "i2cspm.h"
 #include "si7013.h"
@@ -43,6 +45,15 @@
 /*Calculation Defines*/
 #define TC 		-.0046
 
+/*LEUART defines*/
+#define LEUARTRXPORT 		gpioPortD
+#define	LEUARTRXPIN			11
+#define	LEUARTTXPORT		gpioPortD
+#define	LEUARTTXPIN			10
+#define HM10BAUD			9600
+#define STDFREQ				0
+#define hash				0x23
+#define question			0x3F
 /*
 Global Variables
 */
@@ -62,6 +73,8 @@ float k0obj;
 
 I2CSPM_Init_TypeDef i2cInit;
 
+// synchronization variables
+volatile bool txDone = false;
 
 union 
 {
@@ -285,6 +298,38 @@ void readEEPROM(void)
   
 }
 
+void leuart_init(void)
+{
+	LEUART_Init_TypeDef build;
+	build.baudrate = HM10BAUD;
+	build.refFreq = STDFREQ;
+	build.enable = leuartEnable;
+	build.databits = leuartDatabits8;
+	build.parity = leuartNoParity;
+	build.stopbits = leuartStopbits1;
+
+	LEUART_Init(LEUART0, &build);
+	while(LEUART0->SYNCBUSY);													// wait for high and low frequency clock synchronization
+
+	LEUART0->ROUTEPEN = LEUART_ROUTEPEN_RXPEN | LEUART_ROUTEPEN_TXPEN;
+	LEUART0->ROUTELOC0 = LEUART_ROUTELOC0_TXLOC_LOC18 | LEUART_ROUTELOC0_RXLOC_LOC18;
+
+	LEUART0->IFC = LEUART_IFC_SIGF;
+
+	//LEUART0->CTRL |= LEUART_CTRL_LOOPBK;										// enable loopback for debug
+	LEUART0->IEN = LEUART_IEN_SIGF;
+	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;										// block RXDATA from being transferred from RXDATA shift into RXDATA buffer
+	while(LEUART0->SYNCBUSY);													// wait for high and low frequency clock synchronization
+
+	LEUART0->CTRL = LEUART_CTRL_SFUBRX | LEUART_CTRL_RXDMAWU;					// on start frame interrupt, clears RXBLOCK automatically (must reenable after)
+																						// also DMA controller wakeup on RX or TX of LEUART
+	while(LEUART0->SYNCBUSY);													// wait for high and low frequency clock synchronization
+	LEUART0->STARTFRAME = question;												// "?" set as startframe
+	LEUART0->SIGFRAME = hash;													// "#" set as endframe
+	LEUART_Enable(LEUART0, leuartEnable);
+	NVIC_EnableIRQ(LEUART0_IRQn);
+}
+
 /***************************************************************************//**
  * @brief Setup GPIO, enable sensor isolation switch
  ******************************************************************************/
@@ -295,6 +340,9 @@ static void gpioSetup(void)
 
   /* Enable Si7021 sensor isolation switch */
   GPIO_PinModeSet(CS0_SENSOR_EN_PORT, CS0_SENSOR_EN_PIN, gpioModePushPull, 1);
+
+  GPIO_PinModeSet(LEUARTRXPORT, LEUARTRXPIN, gpioModeInput, 0);
+  GPIO_PinModeSet(LEUARTTXPORT, LEUARTTXPIN, gpioModePushPull, 1);
 }
 
 /***************************************************************************//**
@@ -347,6 +395,76 @@ static void periodicUpdateCallback(RTCDRV_TimerID_t id, void *user)
   updateMeasurement = true;
 }
 
+void LEUART0_IRQHandler()
+{
+	CORE_ATOMIC_IRQ_DISABLE();
+	unsigned int flag = LEUART0->IF & LEUART0->IEN;
+	LEUART0->IFC = flag;
+	// if(flag & LEUART_IF_SIGF)		// flag handle for sigframe (end of transmission)
+	// {
+	// 	//ind = 0;
+	// 	//LEUART0->IEN &= ~(LEUART_IEN_RXDATAV);			// disable RXDATAV and sigf
+
+	// 	LEUART0->CMD = LEUART_CMD_RXBLOCKEN;			// enable blockRXDATA again
+	// 	while(LEUART0->SYNCBUSY);
+	// 	LDMA_StartTransfer(RX_DMA_CHANNEL, &ldmaRXConfig, &ldmaRXDescriptor);			// enable LDMA
+	// 	scheduler_event |= FLAG5;
+	// }
+
+	// TXBL: 1 when ready for transmit for new byte
+	// TXC:  1 after transmission is complete and txbuffer is empty
+	if((flag & LEUART_IF_TXBL) || (flag & LEUART_IF_TXC))
+	{
+		LEUART0->IEN &= ~(LEUART_IEN_TXBL | LEUART_IEN_TXC);
+    txDone = true;
+	}
+
+	CORE_ATOMIC_IRQ_ENABLE();
+}
+
+void temptoASCII(float tempC, char * array)
+{
+	if(tempC < 0){
+		char temp = '-';
+		array[0] = temp;
+		tempC *= -1;
+	}
+	else{
+		array[0] = '+';
+	}
+	unsigned int working;
+	unsigned int temporary_int;
+	temporary_int = (int)(tempC * 10);
+	if(temporary_int >= 1000){
+	working = temporary_int / 1000;
+	working += 0x30;
+	array[1] = (char)working;
+	}
+	else{
+		array[1] = ' ';
+	}
+	if(temporary_int >= 100){
+	temporary_int %= 1000;
+	working = temporary_int / 100;
+	working += 0x30;
+	array[2] = (char)working;
+	}
+	else{
+		array[2] = ' ';
+	}
+	if(temporary_int >= 10){
+		temporary_int %= 100;
+		working = temporary_int / 10;
+		working += 0x30;
+		array[3] = (char)working;
+	}
+	array[4] = '.';
+	temporary_int %= 10;
+	temporary_int += 0x30;
+	array[5] = (char)temporary_int;
+  array[6] = 'F';
+	return;
+}
 
 /***************************************************************************//**
  * @brief  Main function
@@ -386,6 +504,9 @@ int main(void)
   float Tobj;
   float Fobj;
 
+// LEUART variables
+	char transm_data[7];
+
 // prevent error
   uint32_t rhData = 0;
 
@@ -399,13 +520,16 @@ int main(void)
   /* Switch HFCLK to HFXO and disable HFRCO */
   CMU_ClockSelectSet(cmuClock_HF, cmuSelect_HFXO);
   CMU_OscillatorEnable(cmuOsc_HFRCO, false, false);
-
+	CMU_ClockSelectSet(cmuClock_LFB, cmuSelect_LFXO);
+	CMU_ClockEnable(cmuClock_LEUART0, true);
   /* Initalize other peripherals and drivers */
   gpioSetup();
   RTCDRV_Init();
   GRAPHICS_Init();
   I2CSPM_Init(&i2cInit);
 
+/*UART Init*/
+  leuart_init();
   /* Get initial sensor status */
   // si7013_status = Si7013_Detect(i2cInit.port, SI7021_ADDR, 0);
   readEEPROM();
@@ -460,11 +584,17 @@ int main(void)
     {
       updateDisplay = false;
       GRAPHICS_Draw((int32_t)Tobj * 1000, rhData);
+      temptoASCII(Fobj, transm_data);
+      /* Send to bluetooth module via LEUART */
+		  for(int i = 0; i < strlen(transm_data); i++)// send ascii temperature to BLE
+		  {
+        LEUART0->TXDATA = transm_data[i];
+        txDone = false;
+        LEUART0->IEN |= LEUART_IEN_TXC;	// enable TXC interrupt (Transmit Complete)
+        while(!txDone);
+		  }
     }
     EMU_EnterEM2(false);
-
-
-
 
   }
 }
