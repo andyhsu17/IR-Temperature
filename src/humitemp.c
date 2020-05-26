@@ -586,7 +586,7 @@ int main(void)
       GRAPHICS_Draw((int32_t)Tobj * 1000, rhData);
       temptoASCII(Fobj, transm_data);
       /* Send to bluetooth module via LEUART */
-		  for(int i = 0; i < strlen(transm_data); i++)// send ascii temperature to BLE
+		  for(int i = 0; i < 7; i++)// send ascii temperature to BLE
 		  {
         LEUART0->TXDATA = transm_data[i];
         txDone = false;

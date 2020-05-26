@@ -267,7 +267,4 @@ static void GRAPHICS_CreateString(char *string, int32_t value)
   string[2] = '0' + (value % 10000) / 1000;
   string[1] = '0' + (value % 100000) / 10000;
 
-  if (string[1] == '0') {
-    string[1] = ' ';
-  }
 }
